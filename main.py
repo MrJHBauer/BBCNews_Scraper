@@ -19,8 +19,16 @@ def main():
         title = anchor.contents[3].text
         stories[title] = link  # Save the title and link of the story and key, value pair within the dict.
 
-    for title, link in stories.items():
-        print("Title: {} \nURL: http://www.bbc.co.uk{}".format(title, link))  # Print the title and link to console.
+    # for title, link in stories.items():
+    #    print("Title: {} \nURL: http://www.bbc.co.uk{}".format(title, link))  # Print the title and link to console.
+
+    for story in stories:
+        url = stories[story]  # Get the URL for the current story.
+        response = requests.get("http://www.bbc.co.uk{}".format(url))  # Make a GET request for the above URL.
+
+        soup = BeautifulSoup(response.content, "html.parser")  # Create a BeautifulSoup object of the current story.
+        introduction = soup.find("p", {"class": "story-body__introduction"}).text  # Find the intro for the story.
+        print("Title: {} \nURL: http://www.bbc.co.uk{}\nIntroduction: {}\n".format(story, stories[story], introduction))
 
 if __name__ == "__main__":
     main()
